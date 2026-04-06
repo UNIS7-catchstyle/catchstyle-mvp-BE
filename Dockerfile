@@ -7,7 +7,7 @@ COPY build.gradle settings.gradle ./
 COPY src ./src
 
 # 테스트를 생략하고 실행 가능한 jar 파일 생성
-RUN gradle clean build -x test --no-daemon
+RUN gradle clean build -x test --no-daemon --info --stacktrace
 
 # 2단계: 실행 환경 구성 (컨테이너 용량 최적화)
 # 마찬가지로 jre 버전을 프로젝트에 맞게 수정
