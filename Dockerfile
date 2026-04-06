@@ -1,5 +1,5 @@
 # 1단계: 빌드 환경 구성
-FROM gradle:8.15-jdk17 AS builder
+FROM gradle:jdk17 AS builder
 WORKDIR /app
 
 # 소스 코드 복사
