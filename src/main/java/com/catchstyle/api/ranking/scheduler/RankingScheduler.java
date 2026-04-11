@@ -15,8 +15,8 @@ public class RankingScheduler {
 
     //n시간마다 RankingService의 기능2를 자동 실행하는 트리거 클래스
     //cron 표현식:"초 분 시 일 월 요일" 순서
-    //매 정각(1시간마다) 실행을 의미
-    @Scheduled(cron="0 0 * * * *")
+    //하루 한번 실행을 의미
+    @Scheduled(cron="0 0 0 * * *")
     public void rankingUpdate() {
         rankingService.updateRankings();
 

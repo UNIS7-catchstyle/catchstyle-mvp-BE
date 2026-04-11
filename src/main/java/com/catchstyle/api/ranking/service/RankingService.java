@@ -6,6 +6,7 @@ import com.catchstyle.api.ranking.entity.SearchLog;
 import com.catchstyle.api.ranking.repository.RankingSummaryRepository;
 import com.catchstyle.api.ranking.repository.SearchLogRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,21 +30,25 @@ public class RankingService {
         searchLogRepository.save(entity);
     }
 
-    //기능 2.SearchLog를 집계하여 RankingSummary를 업데이트
+
+// 기능 2: 매일 원본 데이터를 요약 테이블로 밀어넣는 갱신 로직
     @Transactional
-    public void updateRankings(){
-        //1.최근 1시간 동안의 데이터 집계
-        LocalDateTime since = LocalDateTime.now().minusHours(1);
-        List<Object[]> results=searchLogRepository.countKeywordsSince(since);
+    public void updateRankings() {
+        List<Object[]> results = searchLogRepository.findTopKeywordsLast72Hours();
+        if (results.size() < 5) return; //72시간 동안 업데이트 된게 5개 미만이면 그대로 둠
 
-        //2.기존 순위 데이터 전체 삭제
-        rankingSummaryRepository.deleteAll();
+        // 트랜잭션 내에서 기존 테이블의 과거 랭킹을 일괄 삭제
+        rankingSummaryRepository.deleteAllInBatch();
 
-        //3.집계된 데이터를 RankingSummary Entity 리스트로 변환
-        List<RankingSummary> newRankings=results.stream()
-                .map(result->new RankingSummary((String) result[0],(Long) result[1]))
-                .toList();
-        //4.새로운 순위 데이터 일괄 저장
+        // 새로운 상위 5개 데이터 삽입
+        List<RankingSummary> newRankings = new ArrayList<>();
+
+        for (Object[] result : results) {
+            String keyword = (String) result[0];
+            Long count = ((Number) result[1]).longValue();
+            newRankings.add(new RankingSummary(keyword, count));
+        }
+        //업데이트 된 랭킹을 테이블에 저장
         rankingSummaryRepository.saveAll(newRankings);
     }
 

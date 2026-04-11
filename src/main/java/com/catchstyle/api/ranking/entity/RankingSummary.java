@@ -16,7 +16,7 @@ public class RankingSummary {
     private Long id;
 
     //연예인 이름
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", unique=true)
     private String keyword;
 
     //누적 검색 횟수
