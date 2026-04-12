@@ -13,6 +13,9 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
+cron:
+  secret: ${CRON_SECRET:default-secret-key}
+
   #?? ??? (??): ?? ?? ??? ?????, application.yml ??? ?? ?? ?? ????? ???
   #${DB_PASSWORD}?? ?? ?? ?? ??? ??? ???.
   #
@@ -20,3 +23,5 @@ spring:
   #spring:
   #  datasource:
   #    url: jdbc:postgresql://db.jctcovjbmmlikoduwapk.supabase.co:5432/postgres?user=postgres&password=${DB_PASSWORD}
+  #YAML 파일에서 들여쓰기는 점(.)을 의미하므로, cron은 가장 상위 뎁스에 존재해야 합니다.
+  #만약 spring: 하위(들여쓰기)에 넣게 되면 스프링 부트는 이를 ${spring.cron.secret}으로 인식
