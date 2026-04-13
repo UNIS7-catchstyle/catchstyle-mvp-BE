@@ -40,5 +40,10 @@ public class RankingController {
         return ResponseEntity.ok(rankData);
     }
 
+    //cron-job.org 접근용 엔드포인트
+    @GetMapping("/ping")
+    public ResponseEntity<String> keepAlive() {
+        return ResponseEntity.ok("pong");
+    }
 
 }
