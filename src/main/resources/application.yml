@@ -6,6 +6,10 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
+    # DB 커넥션 유효성 강제 관리 옵션 추가
+    hikari:
+      max-lifetime: 580000
+      connection-test-query: SELECT 1
   jpa:
     hibernate:
       ddl-auto: update
