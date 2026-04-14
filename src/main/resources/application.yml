@@ -10,6 +10,7 @@ spring:
     hikari:
       max-lifetime: 580000
       connection-test-query: SELECT 1
+      maximum-pool-size: 5
   jpa:
     hibernate:
       ddl-auto: update
